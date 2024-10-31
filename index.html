@@ -93,6 +93,30 @@
                 posY = 0;
                 speedY *= -1;
             }
+                        }
+
+            // Detect corner collision
+            const epsilon = 0.1; // Small threshold to account for floating-point precision
+            const atLeftEdge = Math.abs(posX) <= epsilon;
+            const atRightEdge = Math.abs(posX + containerWidth - windowWidth) <= epsilon;
+            const atTopEdge = Math.abs(posY) <= epsilon;
+            const atBottomEdge = Math.abs(posY + containerHeight - windowHeight) <= epsilon;
+
+            const atCorner = (atLeftEdge || atRightEdge) && (atTopEdge || atBottomEdge);
+
+            if (atCorner && !cornerHit) {
+                cornerHit = true;
+
+                // Change background color to green
+                container.style.backgroundColor = 'green';
+
+                // Revert back to original color after 200ms
+                setTimeout(() => {
+                    container.style.backgroundColor = '#fff';
+                }, 200);
+            } else if (!atCorner) {
+                cornerHit = false;
+            }
 
             // Apply new position
             container.style.transform = `translate(${posX}px, ${posY}px)`;
