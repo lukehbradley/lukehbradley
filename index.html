@@ -65,10 +65,14 @@
         const container = document.getElementById('movingContainer');
         let posX = 0;
         let posY = 0;
-        let speedX = 0.2; // Adjusted speed for desired movement
+        let speedX = 0.2; // Initial speeds
         let speedY = 0.2;
 
-        let cornerHit = false; // Added this declaration
+        let cornerHit = false; // For the flashing effect
+        let adjustingToCorner = false; // Flag to indicate if we're adjusting trajectory
+        let framesToCorner = 0; // Number of frames to reach the corner
+        let originalSpeedX = speedX; // Store original speeds
+        let originalSpeedY = speedY;
 
         function animateContainer() {
             const containerWidth = container.offsetWidth;
@@ -76,48 +80,75 @@
             const windowWidth = document.documentElement.clientWidth;
             const windowHeight = document.documentElement.clientHeight;
 
+            // Detect proximity to a corner
+            const cornerThreshold = 100; // Adjust as needed
+            if (!adjustingToCorner) {
+                const corners = [
+                    { x: 0, y: 0 }, // Top-left
+                    { x: windowWidth - containerWidth, y: 0 }, // Top-right
+                    { x: 0, y: windowHeight - containerHeight }, // Bottom-left
+                    { x: windowWidth - containerWidth, y: windowHeight - containerHeight }, // Bottom-right
+                ];
+
+                for (const corner of corners) {
+                    const deltaX = corner.x - posX;
+                    const deltaY = corner.y - posY;
+                    const distance = Math.hypot(deltaX, deltaY);
+
+                    if (distance <= cornerThreshold) {
+                        // Start adjusting trajectory
+                        adjustingToCorner = true;
+                        framesToCorner = Math.ceil(distance / Math.hypot(speedX, speedY));
+                        speedX = deltaX / framesToCorner;
+                        speedY = deltaY / framesToCorner;
+                        break;
+                    }
+                }
+            }
+
             // Update position
             posX += speedX;
             posY += speedY;
 
-            // Check for collision with edges
-            if (posX + containerWidth >= windowWidth) {
-                posX = windowWidth - containerWidth;
-                speedX *= -1;
-            } else if (posX <= 0) {
-                posX = 0;
-                speedX *= -1;
-            }
+            // When adjusting to corner, decrement framesToCorner
+            if (adjustingToCorner) {
+                framesToCorner--;
+                if (framesToCorner <= 0) {
+                    // Reached the corner
+                    posX = Math.round(posX);
+                    posY = Math.round(posY);
+                    speedX = -originalSpeedX; // Reverse direction after hitting corner
+                    speedY = -originalSpeedY;
+                    adjustingToCorner = false;
 
-            if (posY + containerHeight >= windowHeight) {
-                posY = windowHeight - containerHeight;
-                speedY *= -1;
-            } else if (posY <= 0) {
-                posY = 0;
-                speedY *= -1;
-            }
+                    // Trigger the flash effect
+                    if (!cornerHit) {
+                        cornerHit = true;
+                        container.style.backgroundColor = 'green';
+                        setTimeout(() => {
+                            container.style.backgroundColor = '#fff';
+                        }, 200);
+                    }
+                }
+            } else {
+                // Normal edge collision detection
+                if (posX + containerWidth >= windowWidth) {
+                    posX = windowWidth - containerWidth;
+                    speedX *= -1;
+                } else if (posX <= 0) {
+                    posX = 0;
+                    speedX *= -1;
+                }
 
-            // Detect corner collision
-            const epsilon = 0.1; // Small threshold to account for floating-point precision
-            const atLeftEdge = Math.abs(posX) <= epsilon;
-            const atRightEdge = Math.abs(posX + containerWidth - windowWidth) <= epsilon;
-            const atTopEdge = Math.abs(posY) <= epsilon;
-            const atBottomEdge = Math.abs(posY + containerHeight - windowHeight) <= epsilon;
+                if (posY + containerHeight >= windowHeight) {
+                    posY = windowHeight - containerHeight;
+                    speedY *= -1;
+                } else if (posY <= 0) {
+                    posY = 0;
+                    speedY *= -1;
+                }
 
-            const atCorner = (atLeftEdge || atRightEdge) && (atTopEdge || atBottomEdge);
-
-            if (atCorner && !cornerHit) {
-                cornerHit = true;
-
-                // Change background color to green
-                container.style.backgroundColor = 'green';
-
-                // Revert back to original color after 200ms
-                setTimeout(() => {
-                    container.style.backgroundColor = '#fff';
-                }, 200);
-            } else if (!atCorner) {
-                cornerHit = false;
+                cornerHit = false; // Reset corner hit flag
             }
 
             // Apply new position
