@@ -130,4 +130,43 @@
                         container.style.backgroundColor = 'green';
                         setTimeout(() => {
                             container.style.backgroundColor = '#fff';
-                        }, 200​⬤
+                        }, 200);
+                    }
+                }
+            } else {
+                // Normal edge collision detection
+                if (posX + containerWidth >= windowWidth) {
+                    posX = windowWidth - containerWidth;
+                    speedX *= -1;
+                    previousSpeedX = speedX; // Update previous speeds
+                } else if (posX <= 0) {
+                    posX = 0;
+                    speedX *= -1;
+                    previousSpeedX = speedX;
+                }
+
+                if (posY + containerHeight >= windowHeight) {
+                    posY = windowHeight - containerHeight;
+                    speedY *= -1;
+                    previousSpeedY = speedY;
+                } else if (posY <= 0) {
+                    posY = 0;
+                    speedY *= -1;
+                    previousSpeedY = speedY;
+                }
+
+                cornerHit = false; // Reset corner hit flag
+            }
+
+            // Apply new position
+            container.style.transform = `translate(${posX}px, ${posY}px)`;
+
+            // Continue animation
+            requestAnimationFrame(animateContainer);
+        }
+
+        // Start the animation
+        animateContainer();
+    </script>
+</body>
+</html>
