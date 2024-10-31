@@ -55,21 +55,40 @@
         <p><a href="mailto:lukeholdenbradley@gmail.com">lukeholdenbradley@gmail.com</a></p>
         <p><a href="https://www.linkedin.com/in/lukeholdenbradley/" target="_blank">linkedin.com/in/lukeholdenbradley</a></p>
     </div>
-     <script>
-        // JavaScript to make the container bounce around
+    <script>
         const box = document.getElementById('bouncingBox');
-        let posX = 50; // Starting X position
-        let posY = 50; // Starting Y position
-        let speedX = 2; // Speed in X direction
-        let speedY = 2; // Speed in Y direction
+        let posX = 50;
+        let posY = 50;
+        let speedX = 2;
+        let speedY = 2;
 
         function animateBox() {
             const boxWidth = box.offsetWidth;
             const boxHeight = box.offsetHeight;
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
+            const cornerThreshold = 20; // Distance from corner to start adjusting
 
-            // Reverse direction when hitting the edges
+            // Check for corners and adjust trajectory
+            if (Math.abs(posX) <= cornerThreshold && Math.abs(posY) <= cornerThreshold) {
+                // Top-left corner
+                speedX = Math.abs(speedX);
+                speedY = Math.abs(speedY);
+            } else if (Math.abs(posX + boxWidth - windowWidth) <= cornerThreshold && Math.abs(posY) <= cornerThreshold) {
+                // Top-right corner
+                speedX = -Math.abs(speedX);
+                speedY = Math.abs(speedY);
+            } else if (Math.abs(posX) <= cornerThreshold && Math.abs(posY + boxHeight - windowHeight) <= cornerThreshold) {
+                // Bottom-left corner
+                speedX = Math.abs(speedX);
+                speedY = -Math.abs(speedY);
+            } else if (Math.abs(posX + boxWidth - windowWidth) <= cornerThreshold && Math.abs(posY + boxHeight - windowHeight) <= cornerThreshold) {
+                // Bottom-right corner
+                speedX = -Math.abs(speedX);
+                speedY = -Math.abs(speedY);
+            }
+
+            // Reverse direction when hitting edges
             if (posX + boxWidth >= windowWidth || posX <= 0) speedX *= -1;
             if (posY + boxHeight >= windowHeight || posY <= 0) speedY *= -1;
 
