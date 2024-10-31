@@ -6,7 +6,7 @@
     <title>Luke Bradley</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Helvetica', Arial, sans-serif; /* Uses Helvetica with Arial as fallback */
             margin: 0;
             padding: 0;
             display: flex;
@@ -27,21 +27,16 @@
         }
 
         h1 {
-            font-size: 2.5em;
+            font-size: 2em;
             margin: 0;
-            color: #007acc;
-            font-family: Arial, sans-serif;
+            color: #000; /* Changed to black */
+            font-family: 'Garamond', serif; /* Adds a bit of elegance */
         }
 
-        p {
+        p, a {
             font-size: 1.2em;
-            color: #555;
-        }
-
-        a {
-            color: #007acc;
+            color: #333; /* Set to a dark grey for readability */
             text-decoration: none;
-            font-weight: bold;
         }
 
         a:hover {
@@ -51,29 +46,13 @@
         .social-links {
             margin-top: 20px;
         }
-
-        .social-links a {
-            margin: 0 10px;
-            padding: 10px 20px;
-            border-radius: 5px;
-            background-color: #007acc;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .social-links a:hover {
-            background-color: #005f99;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Luke Bradley / personal site</h1>
         <p>Email: <a href="mailto:lukeholdenbradley@gmail.com">lukeholdenbradley@gmail.com</a></p>
-        <div class="social-links">
-            <a href="https://www.linkedin.com/in/lukeholdenbradley/" target="_blank">LinkedIn</a>
-        </div>
+        <p>LinkedIn: <a href="https://www.linkedin.com/in/lukeholdenbradley/" target="_blank">linkedin.com/in/lukeholdenbradley</a></p>
     </div>
 </body>
 </html>
