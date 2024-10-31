@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luke Bradley</title>
     <style>
         body {
             font-family: 'Garamond', serif;
@@ -68,8 +67,8 @@
         const container = document.getElementById('movingContainer');
         let posX = 50;
         let posY = 50;
-        let speedX = 1;
-        let speedY = 1;
+        let speedX = 0.5;
+        let speedY = 0.5;
 
         function animateContainer() {
             const containerWidth = container.offsetWidth;
@@ -84,18 +83,18 @@
             // Check for collision with edges
             if (posX + containerWidth >= windowWidth) {
                 posX = windowWidth - containerWidth;
-                speedX *= -1;
+                speedX *= -0.5;
             } else if (posX <= 0) {
                 posX = 0;
-                speedX *= -1;
+                speedX *= -0.5;
             }
 
             if (posY + containerHeight >= windowHeight) {
                 posY = windowHeight - containerHeight;
-                speedY *= -1;
+                speedY *= -0.5;
             } else if (posY <= 0) {
                 posY = 0;
-                speedY *= -1;
+                speedY *= -0.5;
             }
 
             // Adjust trajectory to hit corners precisely
@@ -107,8 +106,8 @@
                 (Math.abs(posX + containerWidth - windowWidth) <= nearCornerThreshold && Math.abs(posY + containerHeight - windowHeight) <= nearCornerThreshold) // Bottom-right
             ) {
                 // Reverse direction to stay within bounds
-                speedX *= -1;
-                speedY *= -1;
+                speedX *= -0.5;
+                speedY *= -0.5;
             }
 
             // Apply new position
