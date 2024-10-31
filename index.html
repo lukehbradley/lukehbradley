@@ -55,5 +55,37 @@
         <p><a href="mailto:lukeholdenbradley@gmail.com">lukeholdenbradley@gmail.com</a></p>
         <p><a href="https://www.linkedin.com/in/lukeholdenbradley/" target="_blank">linkedin.com/in/lukeholdenbradley</a></p>
     </div>
+     <script>
+        // JavaScript to make the container bounce around
+        const box = document.getElementById('bouncingBox');
+        let posX = 50; // Starting X position
+        let posY = 50; // Starting Y position
+        let speedX = 2; // Speed in X direction
+        let speedY = 2; // Speed in Y direction
+
+        function animateBox() {
+            const boxWidth = box.offsetWidth;
+            const boxHeight = box.offsetHeight;
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+
+            // Reverse direction when hitting the edges
+            if (posX + boxWidth >= windowWidth || posX <= 0) speedX *= -1;
+            if (posY + boxHeight >= windowHeight || posY <= 0) speedY *= -1;
+
+            // Update position
+            posX += speedX;
+            posY += speedY;
+
+            // Apply new position
+            box.style.transform = `translate(${posX}px, ${posY}px)`;
+
+            // Repeat animation
+            requestAnimationFrame(animateBox);
+        }
+
+        // Start the animation
+        animateBox();
+    </script>
 </body>
 </html>
