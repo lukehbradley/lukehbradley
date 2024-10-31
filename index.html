@@ -63,46 +63,54 @@
         let speedX = 2;
         let speedY = 2;
 
-        function animateBox() {
+       function animateBox() {
             const boxWidth = box.offsetWidth;
             const boxHeight = box.offsetHeight;
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
             const cornerThreshold = 20; // Distance from corner to start adjusting
 
-            // Check for corners and adjust trajectory
-            if (Math.abs(posX) <= cornerThreshold && Math.abs(posY) <= cornerThreshold) {
-                // Top-left corner
-                speedX = Math.abs(speedX);
-                speedY = Math.abs(speedY);
-            } else if (Math.abs(posX + boxWidth - windowWidth) <= cornerThreshold && Math.abs(posY) <= cornerThreshold) {
-                // Top-right corner
-                speedX = -Math.abs(speedX);
-                speedY = Math.abs(speedY);
-            } else if (Math.abs(posX) <= cornerThreshold && Math.abs(posY + boxHeight - windowHeight) <= cornerThreshold) {
-                // Bottom-left corner
-                speedX = Math.abs(speedX);
-                speedY = -Math.abs(speedY);
-            } else if (Math.abs(posX + boxWidth - windowWidth) <= cornerThreshold && Math.abs(posY + boxHeight - windowHeight) <= cornerThreshold) {
-                // Bottom-right corner
-                speedX = -Math.abs(speedX);
-                speedY = -Math.abs(speedY);
+        // Calculate center positions of the box
+        const boxCenterX = posX + boxWidth / 2;
+        const boxCenterY = posY + boxHeight / 2;
+
+        // Define corner positions
+        const corners = [
+            { x: 0, y: 0 }, // Top-left
+            { x: windowWidth, y: 0 }, // Top-right
+            { x: 0, y: windowHeight }, // Bottom-left
+            { x: windowWidth, y: windowHeight }, // Bottom-right
+        ];
+
+        // Check if near any corner
+        for (let corner of corners) {
+            const dx = corner.x - boxCenterX;
+            const dy = corner.y - boxCenterY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+    
+            if (distance <= cornerThreshold) {
+                // Adjust speed to head directly towards the corner
+                const speedMagnitude = Math.sqrt(speedX * speedX + speedY * speedY);
+                speedX = (dx / distance) * speedMagnitude;
+                speedY = (dy / distance) * speedMagnitude;
+                break;
             }
+    }
 
-            // Reverse direction when hitting edges
-            if (posX + boxWidth >= windowWidth || posX <= 0) speedX *= -1;
-            if (posY + boxHeight >= windowHeight || posY <= 0) speedY *= -1;
+    // Edge collision logic remains the same
+    if (posX + boxWidth >= windowWidth || posX <= 0) speedX *= -1;
+    if (posY + boxHeight >= windowHeight || posY <= 0) speedY *= -1;
 
-            // Update position
-            posX += speedX;
-            posY += speedY;
+    // Update position
+    posX += speedX;
+    posY += speedY;
 
-            // Apply new position
-            box.style.transform = `translate(${posX}px, ${posY}px)`;
+    // Apply new position
+    box.style.transform = `translate(${posX}px, ${posY}px)`;
 
-            // Repeat animation
-            requestAnimationFrame(animateBox);
-        }
+    // Repeat animation
+    requestAnimationFrame(animateBox);
+}
 
         // Start the animation
         animateBox();
