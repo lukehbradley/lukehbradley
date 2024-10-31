@@ -3,11 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luke Bradley / Personal Website</title>
+    <title>Luke Bradley</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+            color: #007acc;
+            font-family: Georgia, serif; /* Slight variation to add elegance */
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        a {
+            color: #007acc;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .social-links {
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            margin: 0 10px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: #007acc;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .social-links a:hover {
+            background-color: #005f99;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome!</h1>
-    <p>email: lukeholdenbradley@gmail.com</p>
-    <p>https://www.linkedin.com/in/lukeholdenbradley/</p>
+    <div class="container">
+        <h1>Welcome!</h1>
+        <p>Email: <a href="mailto:lukeholdenbradley@gmail.com">lukeholdenbradley@gmail.com</a></p>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/lukeholdenbradley/" target="_blank">LinkedIn</a>
+        </div>
+    </div>
 </body>
 </html>
