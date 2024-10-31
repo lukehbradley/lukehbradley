@@ -71,8 +71,8 @@
         let cornerHit = false; // For the flashing effect
         let adjustingToCorner = false; // Flag to indicate if we're adjusting trajectory
         let framesToCorner = 0; // Number of frames to reach the corner
-        let originalSpeedX = speedX; // Store original speeds
-        let originalSpeedY = speedY;
+        let previousSpeedX = speedX; // Store previous speeds
+        let previousSpeedY = speedY;
 
         function animateContainer() {
             const containerWidth = container.offsetWidth;
@@ -95,10 +95,13 @@
                     const deltaY = corner.y - posY;
                     const distance = Math.hypot(deltaX, deltaY);
 
-                    if (distance <= cornerThreshold) {
+                    if (distance <= cornerThreshold && distance > 0) {
                         // Start adjusting trajectory
                         adjustingToCorner = true;
-                        framesToCorner = Math.ceil(distance / Math.hypot(speedX, speedY));
+                        previousSpeedX = speedX; // Store current speeds
+                        previousSpeedY = speedY;
+                        const speedMagnitude = Math.hypot(speedX, speedY) || 0.2; // Avoid division by zero
+                        framesToCorner = Math.ceil(distance / speedMagnitude) || 1;
                         speedX = deltaX / framesToCorner;
                         speedY = deltaY / framesToCorner;
                         break;
@@ -117,8 +120,8 @@
                     // Reached the corner
                     posX = Math.round(posX);
                     posY = Math.round(posY);
-                    speedX = -originalSpeedX; // Reverse direction after hitting corner
-                    speedY = -originalSpeedY;
+                    speedX = -previousSpeedX; // Reverse direction after hitting corner
+                    speedY = -previousSpeedY;
                     adjustingToCorner = false;
 
                     // Trigger the flash effect
@@ -127,39 +130,4 @@
                         container.style.backgroundColor = 'green';
                         setTimeout(() => {
                             container.style.backgroundColor = '#fff';
-                        }, 200);
-                    }
-                }
-            } else {
-                // Normal edge collision detection
-                if (posX + containerWidth >= windowWidth) {
-                    posX = windowWidth - containerWidth;
-                    speedX *= -1;
-                } else if (posX <= 0) {
-                    posX = 0;
-                    speedX *= -1;
-                }
-
-                if (posY + containerHeight >= windowHeight) {
-                    posY = windowHeight - containerHeight;
-                    speedY *= -1;
-                } else if (posY <= 0) {
-                    posY = 0;
-                    speedY *= -1;
-                }
-
-                cornerHit = false; // Reset corner hit flag
-            }
-
-            // Apply new position
-            container.style.transform = `translate(${posX}px, ${posY}px)`;
-
-            // Continue animation
-            requestAnimationFrame(animateContainer);
-        }
-
-        // Start the animation
-        animateContainer();
-    </script>
-</body>
-</html>
+                        }, 200​⬤
