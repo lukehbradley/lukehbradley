@@ -2,24 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luke Bradley</title>
     <style>
         body {
-            font-family: 'Garamond', serif;
             margin: 0;
             padding: 0;
             overflow: hidden; /* Prevents scrollbars */
             background-color: #f4f4f9;
             color: #333;
-            position: relative; /* Establishes a positioning context for absolute children */
-            height: 100vh; /* Full viewport height */
-            width: 100vw;  /* Full viewport width */
         }
 
         .container {
             position: absolute; /* Allows movement via JavaScript */
-            top: 50px; /* Initial position matching posX and posY */
-            left: 50px;
+            top: 0;
+            left: 0;
+            box-sizing: border-box; /* Includes padding and border in width and height */
             text-align: center;
             max-width: 600px;
             padding: 20px;
@@ -65,16 +62,16 @@
     </div>
     <script>
         const container = document.getElementById('movingContainer');
-        let posX = 50;
-        let posY = 50;
-        let speedX = 0.5;
-        let speedY = 0.5;
+        let posX = 0;
+        let posY = 0;
+        let speedX = 0.05; // Reduced speed for slower movement
+        let speedY = 0.05;
 
         function animateContainer() {
             const containerWidth = container.offsetWidth;
             const containerHeight = container.offsetHeight;
-            const windowWidth = window.innerWidth;
-            const windowHeight = window.innerHeight;
+            const windowWidth = document.documentElement.clientWidth;
+            const windowHeight = document.documentElement.clientHeight;
 
             // Update position
             posX += speedX;
@@ -83,31 +80,18 @@
             // Check for collision with edges
             if (posX + containerWidth >= windowWidth) {
                 posX = windowWidth - containerWidth;
-                speedX *= -0.5;
+                speedX *= -1;
             } else if (posX <= 0) {
                 posX = 0;
-                speedX *= -0.5;
+                speedX *= -1;
             }
 
             if (posY + containerHeight >= windowHeight) {
                 posY = windowHeight - containerHeight;
-                speedY *= -0.5;
+                speedY *= -1;
             } else if (posY <= 0) {
                 posY = 0;
-                speedY *= -0.5;
-            }
-
-            // Adjust trajectory to hit corners precisely
-            const nearCornerThreshold = 1; // Pixels within which to snap to corner
-            if (
-                (Math.abs(posX) <= nearCornerThreshold && Math.abs(posY) <= nearCornerThreshold) || // Top-left
-                (Math.abs(posX + containerWidth - windowWidth) <= nearCornerThreshold && Math.abs(posY) <= nearCornerThreshold) || // Top-right
-                (Math.abs(posX) <= nearCornerThreshold && Math.abs(posY + containerHeight - windowHeight) <= nearCornerThreshold) || // Bottom-left
-                (Math.abs(posX + containerWidth - windowWidth) <= nearCornerThreshold && Math.abs(posY + containerHeight - windowHeight) <= nearCornerThreshold) // Bottom-right
-            ) {
-                // Reverse direction to stay within bounds
-                speedX *= -0.5;
-                speedY *= -0.5;
+                speedY *= -1;
             }
 
             // Apply new position
