@@ -123,14 +123,6 @@
                     speedX = -previousSpeedX; // Reverse direction after hitting corner
                     speedY = -previousSpeedY;
                     adjustingToCorner = false;
-
-                    // Trigger the flash effect
-                    if (!cornerHit) {
-                        cornerHit = true;
-                        container.style.backgroundColor = 'green';
-                        setTimeout(() => {
-                            container.style.backgroundColor = '#fff';
-                        }, 200);
                     }
                 }
             } else {
